@@ -868,7 +868,9 @@ class Comparison:
         ):  # avoid call another function if they are equal
             notesub_op, notesub_cost = [], 0
         else:
-            notesub_op, notesub_cost = Comparison._annotated_note_diff(original[0], compare_to[0])
+            ids = (original[0].note_idx_in_chord,
+                   compare_to[0].note_idx_in_chord) if original[0].note_idx_in_chord and compare_to[0].note_idx_in_chord is not None else (0, 0)
+            notesub_op, notesub_cost = Comparison._annotated_note_diff(original[0], compare_to[0], ids)
         cost["notesub"] += notesub_cost
         op_list["notesub"].extend(notesub_op)
         # compute the minimum of the possibilities
@@ -877,7 +879,7 @@ class Comparison:
         return out
 
     @staticmethod
-    def _annotated_note_diff(annNote1: AnnNote, annNote2: AnnNote):
+    def _annotated_note_diff(annNote1: AnnNote, annNote2: AnnNote, ids: tuple[int, int]=(0, 0)):
         """
         Compute the differences between two annotated notes.
         Each annotated note consist in a 5tuple (pitches, notehead, dots, beamings, tuplets)
@@ -895,7 +897,7 @@ class Comparison:
         else:
             # pitches diff is computed using Levenshtein distances (they are already ordered)
             op_list_pitch, cost_pitch = Comparison._pitches_levenshtein_diff(
-                annNote1.pitches, annNote2.pitches, annNote1, annNote2, (0, 0)
+                annNote1.pitches, annNote2.pitches, annNote1, annNote2, ids
             )
         op_list.extend(op_list_pitch)
         cost += cost_pitch
@@ -1229,8 +1231,9 @@ class Comparison:
                     # if equal, avoid _annotated_note_diff call
                     notesub_op, notesub_cost = [], 0
                 else:
+                    ids = (ano.note_idx_in_chord, anc.note_idx_in_chord) if ano.note_idx_in_chord and anc.note_idx_in_chord is not None else (0, 0)
                     notesub_op, notesub_cost = (
-                        Comparison._annotated_note_diff(ano, anc)
+                        Comparison._annotated_note_diff(ano, anc, ids)
                     )
                 cost += notesub_cost
                 op_list.extend(notesub_op)
