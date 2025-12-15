@@ -1,3 +1,7 @@
+Below is the documentation for the original musicdiff package. This repo contains a bugfix in `comparison.py` in `_annotated_note_diff()` and `_inside_bars_diff_lin()` such that the correct note in a chord is selected when there is a wrong note or accidental within the chord, rather than the root always being selected. There is also a modification in `visualization.py` in `show_diffs()` to smoothen the process of converting straight to musicxml. The rest of the package is the same.
+
+Additionally, there is a new script `music_vis.py` that allows the user to diff a set of Humdrum Kern Files contained across several directories, using these modifications. It requires MuseScore 3 to be installed, and for the paths in `mscore-wrapper` to be modified to work on a specific local to work properly.
+
 # musicdiff
 A Python3 package (and command-line tool) for computing and visualizing (or describing) the notation differences between two music scores, or between two folders of music scores (for ML training runs).
 

@@ -1,0 +1,4 @@
+#!/bin/bash
+exec "/Applications/MuseScore 3.app/Contents/MacOS/mscore" -S "/Users/hritikgupta/Documents/RIT/Thesis/Projects/musicdiff/bin/one-system.mss" "$@"
+# replace with binary path to your mscore binary, and your path to one-system.mss
+# one-system.mss forces most of the rendered scores to be on one line instead of more than one
